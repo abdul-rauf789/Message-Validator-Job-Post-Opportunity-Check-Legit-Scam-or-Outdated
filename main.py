@@ -100,9 +100,15 @@ def load_messages(csv_path: str, images_dir: str = "", deduplicate: bool = True,
             raw_img = row.get("image_path", "").strip()
             if raw_img and images_dir:
                 import os
-                candidate = os.path.join(images_dir, raw_img)
-                if os.path.isfile(candidate):
-                    img_path = candidate
+                candidates = [
+                    os.path.join(images_dir, raw_img),
+                    os.path.join(images_dir, "_data", raw_img),
+                    os.path.join(images_dir, os.path.basename(raw_img)),
+                ]
+                for candidate in candidates:
+                    if os.path.isfile(candidate):
+                        img_path = candidate
+                        break
             row_id = row.get("id", str(i + 1))
             messages.append({
                 "id": f"CSV_{row_id}",
@@ -129,14 +135,14 @@ def print_dataset_stats(messages: list[dict]):
 # ── Paths ──────────────────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent
 CSV_PATH   = BASE_DIR / "messages_export.csv"
-IMAGES_DIR = BASE_DIR / "_data"
+IMAGES_DIR = BASE_DIR / "_data" / "_data"
 
 
 def print_banner():
     print()
     print("╔══════════════════════════════════════════════════════════╗")
-    print("║   WhatsApp Job Post Validator  (Rule-Based — No API)     ║")
-    print("║  Stage1: Job? → Stage2: Real? → Stage3: Legit/Scam/Old   ║")
+    print("║   WhatsApp Job Post Validator  (Rule-Based — No API)    ║")
+    print("║  Stage1: Job? → Stage2: Real? → Stage3: Legit/Scam/Old ║")
     print("╚══════════════════════════════════════════════════════════╝")
     print()
 
@@ -255,8 +261,10 @@ def main():
             sys.exit(1)
 
         img_dir = str(IMAGES_DIR) if IMAGES_DIR.exists() else ""
-        print(f"📂 Loading from: {CSV_PATH}")
+        print(f"📂 Loading from : {CSV_PATH}")
         print(f"🖼  Images dir  : {img_dir or '(not found)'}")
+        if not img_dir:
+            print(f"   ⚠️  Folder not found — expected: {IMAGES_DIR}")
 
         messages = load_messages(
             csv_path=str(CSV_PATH),
@@ -265,6 +273,13 @@ def main():
             limit=args.limit,
         )
         print_dataset_stats(messages)
+
+        # Show how many images were actually matched on disk
+        img_count = sum(1 for m in messages if m.get("image_path"))
+        if img_count:
+            print(f"  ✅ Images matched on disk : {img_count}")
+        else:
+            print(f"  ⚠️  No images matched on disk (check _data folder location)")
         print()
 
         if args.id:
