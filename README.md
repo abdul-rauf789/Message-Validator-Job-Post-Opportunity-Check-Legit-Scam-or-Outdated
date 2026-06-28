@@ -9,7 +9,7 @@ Built to handle high-volume datasets (4,000+ messages) that would exhaust any fr
 ## What It Does
 
 ```
-Raw WhatsApp Message
+   Raw Message
         │
         ▼
 ┌─────────────────────┐
