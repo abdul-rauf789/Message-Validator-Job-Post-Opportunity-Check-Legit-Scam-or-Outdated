@@ -135,8 +135,8 @@ IMAGES_DIR = BASE_DIR / "_data"
 def print_banner():
     print()
     print("╔══════════════════════════════════════════════════════════╗")
-    print("║   WhatsApp Job Post Validator  (Rule-Based — No API)    ║")
-    print("║  Stage1: Job? → Stage2: Real? → Stage3: Legit/Scam/Old ║")
+    print("║   WhatsApp Job Post Validator  (Rule-Based — No API)     ║")
+    print("║  Stage1: Job? → Stage2: Real? → Stage3: Legit/Scam/Old   ║")
     print("╚══════════════════════════════════════════════════════════╝")
     print()
 
