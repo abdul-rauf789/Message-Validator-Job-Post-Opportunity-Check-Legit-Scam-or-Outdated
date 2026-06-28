@@ -18,11 +18,9 @@ from pipeline import (
 )
 
 
-# ─────────────────────────────────────────────────────────────────
 # FIXTURES
-# ─────────────────────────────────────────────────────────────────
 
-# ── Not a job post ───────────────────────────────────────────────
+# ── Not a job post
 MSG_SCHOLARSHIP = (
     "King Fahd 🇸🇦 Scholarship 2026 for International Students (Fully Funded)\n"
     "Apply: https://opportunitiescorners.com/king-fahd-university-scholarship-2026/\n"
@@ -53,7 +51,7 @@ MSG_VAGUE_MENTION = "You can check their job section on LinkedIn"
 
 MSG_STUB = "AR executive"
 
-# ── Job post but not a real opportunity ──────────────────────────
+# ── Job post but not a real opportunity 
 MSG_NOT_REAL_VAGUE = (
     "We are hiring! DM us anytime if you're interested in joining our team. "
     "Great opportunity for the right candidate."
@@ -70,7 +68,7 @@ MSG_NOT_REAL_PLACEHOLDER = (
     "We will hire the right candidate soon."
 )
 
-# ── Legit job posts ──────────────────────────────────────────────
+# ── Legit job posts 
 MSG_LEGIT_FORMAL = (
     "📢 We Are Hiring – Fresh Graduates Welcome!\n"
     "Position: Office Executive / Medical Billing Support\n"
@@ -109,7 +107,7 @@ MSG_LEGIT_SLOPPY = (
     "Send CV to: hr@rcmclinic.com"
 )
 
-# ── Scam-flavored posts ──────────────────────────────────────────
+# ── Scam-flavored posts 
 MSG_SCAM_FEE = (
     "🚀 WORK FROM HOME OPPORTUNITY 🚀\n\n"
     "Earn PKR 50,000 daily! No experience needed, no qualifications required.\n"
@@ -136,7 +134,7 @@ MSG_SCAM_SLOPPY_BUT_LEGIT = (
     "Last date to apply: 30 June 2026"
 )
 
-# ── Outdated posts ───────────────────────────────────────────────
+# ── Outdated posts
 MSG_OUTDATED_FILLED = (
     "Position has been filled. Thank you for your interest.\n"
     "We were hiring for a marketing executive in Karachi."
@@ -150,7 +148,7 @@ MSG_OUTDATED_PAST_YEAR = (
     "Send CV to: hr@company.com"
 )
 
-# ── Broken link ──────────────────────────────────────────────────
+# ── Broken link 
 MSG_BROKEN_LINK = (
     "Latest Jobs 2020\n"
     "https://www.totally-dead-link-12345xyz.com/jobs-2020\n\n"
@@ -158,9 +156,7 @@ MSG_BROKEN_LINK = (
 )
 
 
-# ─────────────────────────────────────────────────────────────────
 # STAGE 1 TESTS
-# ─────────────────────────────────────────────────────────────────
 
 class TestStage1IsJobPost(unittest.TestCase):
 
@@ -213,9 +209,7 @@ class TestStage1IsJobPost(unittest.TestCase):
         self.assertLessEqual(conf, 1.0)
 
 
-# ─────────────────────────────────────────────────────────────────
 # STAGE 2 TESTS
-# ─────────────────────────────────────────────────────────────────
 
 class TestStage2IsRealOpportunity(unittest.TestCase):
 
@@ -254,9 +248,7 @@ class TestStage2IsRealOpportunity(unittest.TestCase):
         self.assertTrue(is_real, f"Sloppy but real job post. Reason: {reason}")
 
 
-# ─────────────────────────────────────────────────────────────────
 # STAGE 3 TESTS
-# ─────────────────────────────────────────────────────────────────
 
 class TestStage3Classify(unittest.TestCase):
 
@@ -310,9 +302,7 @@ class TestStage3Classify(unittest.TestCase):
         self.assertLessEqual(conf, 1.0)
 
 
-# ─────────────────────────────────────────────────────────────────
 # FULL PIPELINE TESTS
-# ─────────────────────────────────────────────────────────────────
 
 class TestFullPipeline(unittest.TestCase):
 
@@ -340,7 +330,7 @@ class TestFullPipeline(unittest.TestCase):
         r = self._run(MSG_EXAM_UPDATE)
         self.assertEqual(r.label(), "NOT-JOB")
 
-    # ── End-to-end Stage 2 exits ────────────────────────────────
+    # ── End-to-end Stage 2 exits 
 
     def test_pipeline_vague_exits_stage2(self):
         """EDGE CASE: Job-mentioning message that isn't a real opportunity."""
@@ -353,7 +343,7 @@ class TestFullPipeline(unittest.TestCase):
         r = self._run(MSG_NOT_REAL_PLACEHOLDER)
         self.assertFalse(r.is_real_opportunity)
 
-    # ── End-to-end Stage 3 classifications ──────────────────────
+    # ── End-to-end Stage 3 classifications 
 
     def test_pipeline_scam_classified(self):
         r = self._run(MSG_SCAM_FEE)
@@ -397,7 +387,7 @@ class TestFullPipeline(unittest.TestCase):
         self.assertTrue(r.is_job_post)
         self.assertEqual(r.classification, "legit")
 
-    # ── Result structure tests ───────────────────────────────────
+    # ── Result structure tests 
 
     def test_result_has_processing_time(self):
         r = self._run(MSG_LEGIT_FORMAL)
@@ -431,9 +421,7 @@ class TestFullPipeline(unittest.TestCase):
         self.assertEqual(labels["T2"], "LEGIT")
 
 
-# ─────────────────────────────────────────────────────────────────
 # UTILITY TESTS
-# ─────────────────────────────────────────────────────────────────
 
 class TestUtilities(unittest.TestCase):
 
@@ -458,9 +446,7 @@ class TestUtilities(unittest.TestCase):
         self.assertFalse(resolves)
 
 
-# ─────────────────────────────────────────────────────────────────
 # MAIN
-# ─────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     verbosity = 2 if "-v" in sys.argv else 1
