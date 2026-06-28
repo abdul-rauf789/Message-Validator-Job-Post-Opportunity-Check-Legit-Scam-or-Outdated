@@ -26,9 +26,7 @@ from typing import Optional
 from datetime import datetime, date
 import os
 
-# ─────────────────────────────────────────────────────────────────
 # DATA STRUCTURES
-# ─────────────────────────────────────────────────────────────────
 
 @dataclass
 class ValidationResult:
@@ -80,9 +78,7 @@ class ValidationResult:
         return "\n".join(lines)
 
 
-# ─────────────────────────────────────────────────────────────────
 # LINK UTILITIES
-# ─────────────────────────────────────────────────────────────────
 
 URL_RE = re.compile(r'https?://[^\s<>"\']+|www\.[^\s<>"\']+', re.IGNORECASE)
 
@@ -116,11 +112,10 @@ def check_link(url: str, timeout: int = 8) -> tuple[bool, int]:
         return False, 0
 
 
-# ─────────────────────────────────────────────────────────────────
 # RULE SETS
-# ─────────────────────────────────────────────────────────────────
 
-# ── Stage 1: Is it a job post? ───────────────────────────────────
+# ── Stage 1: Is it a job post? 
+
 
 # Strong job-offer signals (Urdu + English)
 JOB_SIGNALS = [
@@ -196,7 +191,7 @@ STUB_PATTERNS = [
     r"\+\d{10,13}|contact\s+no|dm\s+us|send\s+cv)\.?\s*$",
 ]
 
-# ── Stage 2: Is it a real opportunity? ───────────────────────────
+# ── Stage 2: Is it a real opportunity?
 
 ROLE_SIGNALS = [
     r"\b(position|role|post|vacancy|opening|job\s+title|designation)\s*[:–\-]?\s*\w",
@@ -234,7 +229,7 @@ APPLY_SIGNALS = [
     r"\bdeadline\b|\blast\s+date\b",
 ]
 
-# ── Stage 3: Scam signals ─────────────────────────────────────────
+# ── Stage 3: Scam signals 
 
 SCAM_SIGNALS = {
     "upfront_fee":     r"\b(registration\s+fee|processing\s+fee|security\s+deposit|pay\s+(first|before|to\s+join)|advance\s+payment|fee\s+(required|needed|must))\b",
@@ -248,7 +243,7 @@ SCAM_SIGNALS = {
     "overseas_vague":  r"\b(abroad|overseas|foreign)\b.{0,80}\b(job|work|opportunity)\b.{0,80}\b(no\s+experience|easy|guaranteed|100%|sure)\b",
 }
 
-# ── Stage 3: Outdated signals ─────────────────────────────────────
+# ── Stage 3: Outdated signals 
 
 PLACEHOLDER_RE = re.compile(
     r"\[\s*(company\s*name|role|city|position|department|your\s+name)\s*\]",
@@ -282,9 +277,7 @@ SCHOLARSHIP_DOMAINS = {
 }
 
 
-# ─────────────────────────────────────────────────────────────────
 # HELPER FUNCTIONS
-# ─────────────────────────────────────────────────────────────────
 
 def _normalize(text: str) -> str:
     """Lowercase, collapse whitespace, strip markdown/WhatsApp formatting."""
@@ -331,9 +324,7 @@ def _has_future_or_current_year(text: str) -> bool:
     return any(int(y) >= CURRENT_YEAR for y in years)
 
 
-# ─────────────────────────────────────────────────────────────────
 # STAGE IMPLEMENTATIONS
-# ─────────────────────────────────────────────────────────────────
 
 def stage1_is_job_post(text: str, url: Optional[str]) -> tuple[bool, float, str]:
     """
@@ -500,9 +491,7 @@ def stage3_classify(
     return "legit", 0.72, "No scam or outdated signals detected", scam_fired, outdated_fired
 
 
-# ─────────────────────────────────────────────────────────────────
 # PIPELINE
-# ─────────────────────────────────────────────────────────────────
 
 class MessageValidatorPipeline:
     """
