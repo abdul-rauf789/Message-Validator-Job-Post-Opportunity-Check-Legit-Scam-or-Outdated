@@ -1,4 +1,4 @@
-# WhatsApp Job Post Validator
+# Job Post Validator
 
 A fully rule-based pipeline that takes raw WhatsApp messages and classifies them through a 3-stage funnel — **no API key, no internet connection required** (link checking is optional).
 
