@@ -103,12 +103,9 @@ python tests.py -v
 Message_Validator/
 ├── main.py              ← Entry point / CLI runner
 ├── pipeline.py          ← Core rule-based engine (3 stages)
-├── data_loader.py       ← CSV + image loader
-├── sample_messages.py   ← Built-in synthetic test messages
 ├── tests.py             ← 46 unit tests (all passing)
 ├── DECISIONS.md         ← Design decisions write-up
 ├── messages_export.csv  ← Your WhatsApp export data
-└── _data/               ← Message images (optional)
 ```
 
 ---
